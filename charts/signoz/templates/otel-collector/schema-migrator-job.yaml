@@ -11,6 +11,12 @@ spec:
       labels:
         {{- include "schemaMigrator.labels" . | nindent 8 }}
     spec:
+      {{- with .Values.schemaMigrator.imagePullSecrets }}
+      imagePullSecrets:
+      {{- range . }}
+        - name: {{ . | quote }}
+      {{- end }}
+      {{- end }}
       initContainers:
         {{- if .Values.schemaMigrator.initContainers.init.enabled }}
         - name: {{ include "schemaMigrator.fullname" . }}-init
@@ -40,3 +46,4 @@ spec:
             {{- end }}
       restartPolicy: OnFailure
 {{- end }}
+
